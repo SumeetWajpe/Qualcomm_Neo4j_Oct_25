@@ -1,0 +1,16 @@
+# Github Repo
+https://github.com/SumeetWajpe/Qualcomm_Neo4j_Oct_25
+
+# Querries
+
+# First way of creating relationship
+create (s:Supplier{name:"ITC"}),(c:Client{name:"Honeywell"}), (s)-[r:SUPPLIES_TO]->(c) return s,c,r
+
+# Second way of creating relationships
+create (s:Supplier{name:"ITC"})-[r:SUPPLIES_TO]->(c:Client{name:"IBM"}) return s,c,r
+
+# Multiple nodes with their relationships
+create (h:Property{name:"House"})<-[r:OWNS]-(p:Person{name:"Aniket"})-[m:MARRIED_TO]->(g:Person{name:"Geeta"}) return *
+
+
+create (a:Person{name:"Aniket"}),(h:Property{name:"HOME"}),(g:Person{name:"Geeta"}),(a)-[i:IS_MARRIED_TO]->(g),(a)-[o:OWNS]->(h) return *
