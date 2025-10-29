@@ -14,3 +14,13 @@ create (h:Property{name:"House"})<-[r:OWNS]-(p:Person{name:"Aniket"})-[m:MARRIED
 
 
 create (a:Person{name:"Aniket"}),(h:Property{name:"HOME"}),(g:Person{name:"Geeta"}),(a)-[i:IS_MARRIED_TO]->(g),(a)-[o:OWNS]->(h) return *
+
+# Using Where caluse 
+Match (player:PLAYER) WHERE player.weight >= 100 RETURN player
+
+# Hands On - 
+1. Return // All nodes //
+2. Return All Nodes with specific label (PLAYER)
+3. Return players with their name and height
+4. Return Nodes (Players) with height greater than 2.1 or weight greater than 120
+5. Return  Nodes(Players) with a BMI not larger than 25
