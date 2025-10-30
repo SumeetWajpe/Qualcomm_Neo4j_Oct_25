@@ -18,9 +18,18 @@ create (a:Person{name:"Aniket"}),(h:Property{name:"HOME"}),(g:Person{name:"Geeta
 # Using Where caluse 
 Match (player:PLAYER) WHERE player.weight >= 100 RETURN player
 
-# Hands On - 
-1. Return // All nodes //
-2. Return All Nodes with specific label (PLAYER)
-3. Return players with their name and height
-4. Return Nodes (Players) with height greater than 2.1 or weight greater than 120
+# Hands On - Querries
+1. Return // All nodes // - Match (n) return n
+2. Return All Nodes with specific label (PLAYER) - Match (n:PLAYER) return n
+3. Return players with their name and height - Match (n:PLAYER) return n.name,n.height
+4. Return Nodes (Players) with height greater than 2.1 or weight greater than 120 - Match (n:PLAYER) WHERE n.height >= 2.1 OR n.weight >= 120 return n
 5. Return  Nodes(Players) with a BMI not larger than 25
+MATCH (player:PLAYER) 
+WHERE NOT (player.weight / (player.height * player.height)) > 25
+RETURN player
+6. Return (3) players with highest height - Using Order By
+MATCH (player:PLAYER)
+WHERE player.height >= 2
+RETURN player
+ORDER BY player.height DESC
+LIMIT 3 
