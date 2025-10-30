@@ -51,3 +51,49 @@ Match (player:PLAYER{name:"LeBron James"})-[t:TEAMMATES] -> (teammate:PLAYER)
 Match (teammate)-[contract:PLAYS_FOR]->(:TEAM)
 WHERE contract.salary >= 35000000
 RETURN teammate
+
+# Aggregation querries
+1. Find out total player count
+Match (n:PLAYER) RETURN COUNT(*) AS totalPlayerNodes
+
+2. Get players and number of games played
+MATCH (player:PLAYER) - [gameplayed:PLAYED_AGAINST] - (team:TEAM)
+RETURN player.name, COUNT(gameplayed)
+
+3. Get players and  (Avg points)
+MATCH (p:PLAYER)-[gamePlayed:PLAYED_AGAINST]->(:TEAM)
+RETURN p.name, AVG(gamePlayed.points)
+
+4. Using With clause
+MATCH (c:Customer)-[:BUYS]->(p:Product {name: 'Chocolate'})
+WITH c AS customers
+RETURN customers.firstName AS chocolateCustomers
+
+5. Person who has not directed any movie
+MATCH (a:Person {name: 'Martin Sheen'})
+OPTIONAL MATCH (a)-[r:DIRECTED]->()
+RETURN a.name, r
+
+
+# Update querries
+1. Update the node preoperties
+MATCH (p:PLAYER{name:"James Harden"}) SET p.weight = 120 RETURN p.name,p.weight
+
+2. Updating relationship properties
+Update LeBron James salary to 60000000
+MATCH (player:PLAYER{name:"LeBron James"})-[contract:PLAYS_FOR]->(t:TEAM)
+SET contract.salary = 60000000
+RETURN player.name,contract.salary
+
+# Remove is used to remove properties from Node / Rel
+# Delete is used to remove node / rel
+
+// Delete node and relationships
+
+MATCH (ja{name:"Ja Morant"})
+DETACH DELETE ja
+
+// Delete relationship
+MATCH(joel {name: "Joel Embiid"}) - [rel:PLAYS_FOR] -> (:TEAM)
+DELETE rel
+
