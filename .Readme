@@ -19,6 +19,7 @@ create (a:Person{name:"Aniket"}),(h:Property{name:"HOME"}),(g:Person{name:"Geeta
 Match (player:PLAYER) WHERE player.weight >= 100 RETURN player
 
 # Hands On - Querries
+# Querrying the nodes
 1. Return // All nodes // - Match (n) return n
 2. Return All Nodes with specific label (PLAYER) - Match (n:PLAYER) return n
 3. Return players with their name and height - Match (n:PLAYER) return n.name,n.height
@@ -33,3 +34,20 @@ WHERE player.height >= 2
 RETURN player
 ORDER BY player.height DESC
 LIMIT 3 
+
+# Querrying nodes with the relationships
+1. Get all the LAKER PLAYERS
+Match (player:PLAYER) - [:PLAYS_FOR] -> (team:TEAM)
+WHERE team.name = "LA Lakers"
+RETURN player,team
+
+2. Get All Players that make more than 35M
+Match (player:PLAYER) - [contract:PLAYS_FOR] -> (team:TEAM)
+WHERE contract.salary >= 35000000
+return player
+
+3. GET all LeBron Teammates who are earning > than 35000000
+Match (player:PLAYER{name:"LeBron James"})-[t:TEAMMATES] -> (teammate:PLAYER)
+Match (teammate)-[contract:PLAYS_FOR]->(:TEAM)
+WHERE contract.salary >= 35000000
+RETURN teammate
