@@ -97,3 +97,16 @@ DETACH DELETE ja
 MATCH(joel {name: "Joel Embiid"}) - [rel:PLAYS_FOR] -> (:TEAM)
 DELETE rel
 
+# Using Contraints (Nodes)
+CREATE CONSTRAINT unique_name FOR (n:Product) REQUIRE n.name IS UNIQUE
+Create (p:Product{name:"Chocolate"}) RETURN p.name 
+Output >>
+ 22N79: Data exception - property uniqueness constraint violated
+Property uniqueness constraint violated: Node(30) already exists with label `Product` and property `name` = 'Chocolate'.
+
+# Creating indexes
+1. Create index for age of Person
+CREATE INDEX person_age_index FOR (n:Person) ON (n.age)
+
+2. Create index_for_age for player nodes
+CREATE INDEX index_for_age FOR (n:PLAYER) ON (n.age)
