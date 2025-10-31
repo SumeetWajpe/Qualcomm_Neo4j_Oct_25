@@ -1,91 +1,100 @@
 # Github Repo
+
 https://github.com/SumeetWajpe/Qualcomm_Neo4j_Oct_25
 
 # Querries
 
 # First way of creating relationship
+
 create (s:Supplier{name:"ITC"}),(c:Client{name:"Honeywell"}), (s)-[r:SUPPLIES_TO]->(c) return s,c,r
 
 # Second way of creating relationships
+
 create (s:Supplier{name:"ITC"})-[r:SUPPLIES_TO]->(c:Client{name:"IBM"}) return s,c,r
 
 # Multiple nodes with their relationships
-create (h:Property{name:"House"})<-[r:OWNS]-(p:Person{name:"Aniket"})-[m:MARRIED_TO]->(g:Person{name:"Geeta"}) return *
 
+create (h:Property{name:"House"})<-[r:OWNS]-(p:Person{name:"Aniket"})-[m:MARRIED_TO]->(g:Person{name:"Geeta"}) return \*
 
-create (a:Person{name:"Aniket"}),(h:Property{name:"HOME"}),(g:Person{name:"Geeta"}),(a)-[i:IS_MARRIED_TO]->(g),(a)-[o:OWNS]->(h) return *
+create (a:Person{name:"Aniket"}),(h:Property{name:"HOME"}),(g:Person{name:"Geeta"}),(a)-[i:IS_MARRIED_TO]->(g),(a)-[o:OWNS]->(h) return \*
 
-# Using Where caluse 
+# Using Where caluse
+
 Match (player:PLAYER) WHERE player.weight >= 100 RETURN player
 
 # Hands On - Querries
+
 # Querrying the nodes
+
 1. Return // All nodes // - Match (n) return n
 2. Return All Nodes with specific label (PLAYER) - Match (n:PLAYER) return n
 3. Return players with their name and height - Match (n:PLAYER) return n.name,n.height
 4. Return Nodes (Players) with height greater than 2.1 or weight greater than 120 - Match (n:PLAYER) WHERE n.height >= 2.1 OR n.weight >= 120 return n
-5. Return  Nodes(Players) with a BMI not larger than 25
-MATCH (player:PLAYER) 
-WHERE NOT (player.weight / (player.height * player.height)) > 25
-RETURN player
+5. Return Nodes(Players) with a BMI not larger than 25
+   MATCH (player:PLAYER)
+   WHERE NOT (player.weight / (player.height \* player.height)) > 25
+   RETURN player
 6. Return (3) players with highest height - Using Order By
-MATCH (player:PLAYER)
-WHERE player.height >= 2
-RETURN player
-ORDER BY player.height DESC
-LIMIT 3 
+   MATCH (player:PLAYER)
+   WHERE player.height >= 2
+   RETURN player
+   ORDER BY player.height DESC
+   LIMIT 3
 
 # Querrying nodes with the relationships
+
 1. Get all the LAKER PLAYERS
-Match (player:PLAYER) - [:PLAYS_FOR] -> (team:TEAM)
-WHERE team.name = "LA Lakers"
-RETURN player,team
+   Match (player:PLAYER) - [:PLAYS_FOR] -> (team:TEAM)
+   WHERE team.name = "LA Lakers"
+   RETURN player,team
 
 2. Get All Players that make more than 35M
-Match (player:PLAYER) - [contract:PLAYS_FOR] -> (team:TEAM)
-WHERE contract.salary >= 35000000
-return player
+   Match (player:PLAYER) - [contract:PLAYS_FOR] -> (team:TEAM)
+   WHERE contract.salary >= 35000000
+   return player
 
 3. GET all LeBron Teammates who are earning > than 35000000
-Match (player:PLAYER{name:"LeBron James"})-[t:TEAMMATES] -> (teammate:PLAYER)
-Match (teammate)-[contract:PLAYS_FOR]->(:TEAM)
-WHERE contract.salary >= 35000000
-RETURN teammate
+   Match (player:PLAYER{name:"LeBron James"})-[t:TEAMMATES] -> (teammate:PLAYER)
+   Match (teammate)-[contract:PLAYS_FOR]->(:TEAM)
+   WHERE contract.salary >= 35000000
+   RETURN teammate
 
 # Aggregation querries
+
 1. Find out total player count
-Match (n:PLAYER) RETURN COUNT(*) AS totalPlayerNodes
+   Match (n:PLAYER) RETURN COUNT(\*) AS totalPlayerNodes
 
 2. Get players and number of games played
-MATCH (player:PLAYER) - [gameplayed:PLAYED_AGAINST] - (team:TEAM)
-RETURN player.name, COUNT(gameplayed)
+   MATCH (player:PLAYER) - [gameplayed:PLAYED_AGAINST] - (team:TEAM)
+   RETURN player.name, COUNT(gameplayed)
 
-3. Get players and  (Avg points)
-MATCH (p:PLAYER)-[gamePlayed:PLAYED_AGAINST]->(:TEAM)
-RETURN p.name, AVG(gamePlayed.points)
+3. Get players and (Avg points)
+   MATCH (p:PLAYER)-[gamePlayed:PLAYED_AGAINST]->(:TEAM)
+   RETURN p.name, AVG(gamePlayed.points)
 
 4. Using With clause
-MATCH (c:Customer)-[:BUYS]->(p:Product {name: 'Chocolate'})
-WITH c AS customers
-RETURN customers.firstName AS chocolateCustomers
+   MATCH (c:Customer)-[:BUYS]->(p:Product {name: 'Chocolate'})
+   WITH c AS customers
+   RETURN customers.firstName AS chocolateCustomers
 
 5. Person who has not directed any movie
-MATCH (a:Person {name: 'Martin Sheen'})
-OPTIONAL MATCH (a)-[r:DIRECTED]->()
-RETURN a.name, r
-
+   MATCH (a:Person {name: 'Martin Sheen'})
+   OPTIONAL MATCH (a)-[r:DIRECTED]->()
+   RETURN a.name, r
 
 # Update querries
+
 1. Update the node preoperties
-MATCH (p:PLAYER{name:"James Harden"}) SET p.weight = 120 RETURN p.name,p.weight
+   MATCH (p:PLAYER{name:"James Harden"}) SET p.weight = 120 RETURN p.name,p.weight
 
 2. Updating relationship properties
-Update LeBron James salary to 60000000
-MATCH (player:PLAYER{name:"LeBron James"})-[contract:PLAYS_FOR]->(t:TEAM)
-SET contract.salary = 60000000
-RETURN player.name,contract.salary
+   Update LeBron James salary to 60000000
+   MATCH (player:PLAYER{name:"LeBron James"})-[contract:PLAYS_FOR]->(t:TEAM)
+   SET contract.salary = 60000000
+   RETURN player.name,contract.salary
 
 # Remove is used to remove properties from Node / Rel
+
 # Delete is used to remove node / rel
 
 // Delete node and relationships
@@ -98,25 +107,28 @@ MATCH(joel {name: "Joel Embiid"}) - [rel:PLAYS_FOR] -> (:TEAM)
 DELETE rel
 
 # Using Contraints (Nodes)
+
 CREATE CONSTRAINT unique_name FOR (n:Product) REQUIRE n.name IS UNIQUE
-Create (p:Product{name:"Chocolate"}) RETURN p.name 
+Create (p:Product{name:"Chocolate"}) RETURN p.name
 Output >>
- 22N79: Data exception - property uniqueness constraint violated
+22N79: Data exception - property uniqueness constraint violated
 Property uniqueness constraint violated: Node(30) already exists with label `Product` and property `name` = 'Chocolate'.
 
 # Creating indexes [ Range Index - Default]
+
 1. Create index for age of Person
-CREATE INDEX person_age_index FOR (n:Person) ON (n.age)
+   CREATE INDEX person_age_index FOR (n:Person) ON (n.age)
 
 2. Create index_for_age for player nodes
-CREATE INDEX index_for_age FOR (n:PLAYER) ON (n.age)
+   CREATE INDEX index_for_age FOR (n:PLAYER) ON (n.age)
 
 # Using Explain - Returns query execution plan
-EXPLAIN MATCH (p:PLAYER) WHERE p.age > 25  RETURN p.name,p.age
+
+EXPLAIN MATCH (p:PLAYER) WHERE p.age > 25 RETURN p.name,p.age
 
 # Using Profile - Returns query execution plan and the query result (realtime perfomred on existing data)
-PROFILE MATCH (p:PLAYER) WHERE p.age > 25  RETURN p.name,p.age
 
+PROFILE MATCH (p:PLAYER) WHERE p.age > 25 RETURN p.name,p.age
 
 # Hands On - DAY 2
 
@@ -132,7 +144,8 @@ PROFILE MATCH (p:PLAYER) WHERE p.age > 25  RETURN p.name,p.age
 
 6. Return all directors that also acted in their own movie (acted and directed)
 
-# Using UNION 
+# Using UNION
+
 MATCH (actor:Person)-[r:ACTED_IN]->(movie:Movie)
 RETURN actor.name AS name, type(r) AS type, movie.title AS title
 UNION
@@ -140,11 +153,13 @@ MATCH (director:Person)-[r:DIRECTED]->(movie:Movie)
 RETURN director.name AS name, type(r) AS type, movie.title AS title
 
 # Using LOAD CSV
+
 LOAD CSV FROM 'https://data.neo4j.com/bands/artists.csv'
 AS row
 MERGE (:Artist {name: row[1], year: toInteger(row[2])})
 
 # Using LOAD CSV to create nodes & relationships
+
 // Create `Book` nodes
 LOAD CSV WITH HEADERS FROM 'https://data.neo4j.com/importing-cypher/books.csv' AS row
 MERGE (b:Book {id: row.id, title: row.title})
@@ -157,15 +172,15 @@ MATCH (b:Book{id: row.id})
 MERGE (a)-[:WROTE]->(b);
 
 # Importing data from JSON to Neo4j
+
 WITH "https://api.stackexchange.com/2.2/questions?pagesize=100&order=desc&sort=creation&tagged=neo4j&site=stackoverflow&filter=!5-i6Zw8Y)4W7vpy91PMYsKM-k9yzEsSC1_Uxlf" AS url
 CALL apoc.load.json(url) YIELD value
 UNWIND value.items AS item
 RETURN item.title, item.owner, item.creation_date, keys(item)
 LIMIT 5;
 
-
-
 # Export Neo4j Data as JSON
+
 MATCH (nod:User)
 MATCH ()-[rels:KNOWS]->()
 WITH collect(nod) as a, collect(rels) as b
@@ -173,7 +188,6 @@ CALL apoc.export.json.data(a, b, "knows.json", null)
 YIELD file, source, format, nodes, relationships, properties, time, rows, batchSize, batches, done, data
 RETURN file, source, format, nodes, relationships, properties, time, rows, batchSize, batches, done, data
 
-
 # neo4j-admin is a seperate utility(exe)
 
-neo4j-admin database dump neo4j  --to-path="/Users/achilles/Documents/Trainings/2025/Qual_Neo4j/Qualcomm_Neo4j_Oct_25/BackUp"
+neo4j-admin database dump neo4j --to-path="/Users/achilles/Documents/Trainings/2025/Qual_Neo4j/Qualcomm_Neo4j_Oct_25/BackUp"
