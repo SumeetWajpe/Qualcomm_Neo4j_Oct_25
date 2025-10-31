@@ -138,3 +138,8 @@ RETURN actor.name AS name, type(r) AS type, movie.title AS title
 UNION
 MATCH (director:Person)-[r:DIRECTED]->(movie:Movie)
 RETURN director.name AS name, type(r) AS type, movie.title AS title
+
+# Using LOAD CSV
+LOAD CSV FROM 'https://data.neo4j.com/bands/artists.csv'
+AS row
+MERGE (:Artist {name: row[1], year: toInteger(row[2])})
