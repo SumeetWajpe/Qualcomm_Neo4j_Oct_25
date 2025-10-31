@@ -155,3 +155,20 @@ LOAD CSV WITH HEADERS FROM 'https://data.neo4j.com/importing-cypher/books.csv' A
 MATCH (a:Author{name: row.author})
 MATCH (b:Book{id: row.id})
 MERGE (a)-[:WROTE]->(b);
+
+# Importing data from JSON to Neo4j
+WITH "https://api.stackexchange.com/2.2/questions?pagesize=100&order=desc&sort=creation&tagged=neo4j&site=stackoverflow&filter=!5-i6Zw8Y)4W7vpy91PMYsKM-k9yzEsSC1_Uxlf" AS url
+CALL apoc.load.json(url) YIELD value
+UNWIND value.items AS item
+RETURN item.title, item.owner, item.creation_date, keys(item)
+LIMIT 5;
+
+
+
+# Export Neo4j Data as JSON
+MATCH (nod:User)
+MATCH ()-[rels:KNOWS]->()
+WITH collect(nod) as a, collect(rels) as b
+CALL apoc.export.json.data(a, b, "knows.json", null)
+YIELD file, source, format, nodes, relationships, properties, time, rows, batchSize, batches, done, data
+RETURN file, source, format, nodes, relationships, properties, time, rows, batchSize, batches, done, data
