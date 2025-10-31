@@ -132,3 +132,9 @@ PROFILE MATCH (p:PLAYER) WHERE p.age > 25  RETURN p.name,p.age
 
 6. Return all directors that also acted in their own movie (acted and directed)
 
+# Using UNION 
+MATCH (actor:Person)-[r:ACTED_IN]->(movie:Movie)
+RETURN actor.name AS name, type(r) AS type, movie.title AS title
+UNION
+MATCH (director:Person)-[r:DIRECTED]->(movie:Movie)
+RETURN director.name AS name, type(r) AS type, movie.title AS title
