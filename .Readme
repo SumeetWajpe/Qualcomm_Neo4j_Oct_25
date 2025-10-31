@@ -191,3 +191,27 @@ RETURN file, source, format, nodes, relationships, properties, time, rows, batch
 # neo4j-admin is a seperate utility(exe)
 
 neo4j-admin database dump neo4j --to-path="/Users/achilles/Documents/Trainings/2025/Qual_Neo4j/Qualcomm_Neo4j_Oct_25/BackUp"
+
+# Deployment
+Steps - 
+1. Install docker desktop
+2. create dockercompose.yaml (below)
+3. map to the path of the .yaml file on the comd
+4. fire -> docker-compose up -d (detached mode)
+5. Open up docker desktop to browse neo4j instance
+
+# docker-compose.yaml
+services:
+  neo4j:
+    image: neo4j:latest
+    volumes:
+        - C:\deploy/neo4j/logs:/logs
+        - C:\deploy/neo4j/config:/config
+        - C:\deploy/neo4j/data:/data
+        - C:\deploy/neo4j/plugins:/plugins
+    environment:
+        - NEO4J_AUTH=neo4j/neo4j1234
+    ports:
+      - "7474:7474"
+      - "7687:7687"
+    restart: always
