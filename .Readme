@@ -104,9 +104,31 @@ Output >>
  22N79: Data exception - property uniqueness constraint violated
 Property uniqueness constraint violated: Node(30) already exists with label `Product` and property `name` = 'Chocolate'.
 
-# Creating indexes
+# Creating indexes [ Range Index - Default]
 1. Create index for age of Person
 CREATE INDEX person_age_index FOR (n:Person) ON (n.age)
 
 2. Create index_for_age for player nodes
 CREATE INDEX index_for_age FOR (n:PLAYER) ON (n.age)
+
+# Using Explain - Returns query execution plan
+EXPLAIN MATCH (p:PLAYER) WHERE p.age > 25  RETURN p.name,p.age
+
+# Using Profile - Returns query execution plan and the query result (realtime perfomred on existing data)
+PROFILE MATCH (p:PLAYER) WHERE p.age > 25  RETURN p.name,p.age
+
+
+# Hands On - DAY 2
+
+1. Return director/s of the movie (Forrest Gump)
+
+2. Return Movie names "Tom Hanks" acted in
+
+3. Return Movie names "Tom Hanks" acted in & Directed as well
+
+4. Return all actors that acted in Movie named Wall Street
+
+5. Return all movies that belong to the same GENRE as movie 'Despicable Me 2'
+
+6. Return all directors that also acted in their own movie (acted and directed)
+
