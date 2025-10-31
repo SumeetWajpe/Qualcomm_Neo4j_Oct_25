@@ -172,3 +172,8 @@ WITH collect(nod) as a, collect(rels) as b
 CALL apoc.export.json.data(a, b, "knows.json", null)
 YIELD file, source, format, nodes, relationships, properties, time, rows, batchSize, batches, done, data
 RETURN file, source, format, nodes, relationships, properties, time, rows, batchSize, batches, done, data
+
+
+# neo4j-admin is a seperate utility(exe)
+
+neo4j-admin database dump neo4j  --to-path="/Users/achilles/Documents/Trainings/2025/Qual_Neo4j/Qualcomm_Neo4j_Oct_25/BackUp"
