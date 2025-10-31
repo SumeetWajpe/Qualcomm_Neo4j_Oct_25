@@ -143,3 +143,15 @@ RETURN director.name AS name, type(r) AS type, movie.title AS title
 LOAD CSV FROM 'https://data.neo4j.com/bands/artists.csv'
 AS row
 MERGE (:Artist {name: row[1], year: toInteger(row[2])})
+
+# Using LOAD CSV to create nodes & relationships
+// Create `Book` nodes
+LOAD CSV WITH HEADERS FROM 'https://data.neo4j.com/importing-cypher/books.csv' AS row
+MERGE (b:Book {id: row.id, title: row.title})
+MERGE (a:Author {name: row.author});
+
+// Create `WROTE` relationships
+LOAD CSV WITH HEADERS FROM 'https://data.neo4j.com/importing-cypher/books.csv' AS row
+MATCH (a:Author{name: row.author})
+MATCH (b:Book{id: row.id})
+MERGE (a)-[:WROTE]->(b);
